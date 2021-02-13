@@ -20,10 +20,12 @@ def display_entry(request, entry_title):
 def search(request):
     search_term = request.GET['q']
     existing_entries = util.list_entries()
-    exact_match = [x for x in existing_entries if x == search_term]
+    exact_match = [x for x in existing_entries if x.lower() ==
+                   search_term.lower()]
     if exact_match:
         exact_match = exact_match[0]
-    partial_matches = [x for x in existing_entries if search_term in x]
+    partial_matches = [
+        x for x in existing_entries if search_term.lower() in x.lower()]
 
     if exact_match:
         return display_entry(request, exact_match)
@@ -31,6 +33,8 @@ def search(request):
         return render(request, "encyclopedia/partial_matches.html", {
             "partial_matches": partial_matches
         })
+    else:
+        return index(request)
 
 
 def index(request):
