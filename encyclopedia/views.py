@@ -34,6 +34,7 @@ def search(request):
             "partial_matches": partial_matches
         })
     else:
+        # TODO: Add message to alert user his search did not return any results
         return index(request)
 
 
