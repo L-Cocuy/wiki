@@ -5,6 +5,16 @@ import markdown2
 from . import util
 
 
+def new_entry(request):
+    if request.method == 'GET':
+        return render(request, "encyclopedia/new_entry.html")
+    elif request.method == 'POST':
+        entry_title = request.POST['q']
+        content = request.POST['markdown_content']
+        util.save_entry(entry_title, content)
+        return display_entry(request, entry_title)
+
+
 def display_entry(request, entry_title):
     try:
         entry_title = request.GET['q']
