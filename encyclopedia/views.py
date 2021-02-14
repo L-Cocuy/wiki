@@ -31,7 +31,8 @@ def search(request):
         return display_entry(request, exact_match)
     elif partial_matches:
         return render(request, "encyclopedia/partial_matches.html", {
-            "partial_matches": partial_matches
+            "partial_matches": partial_matches,
+            "search_term": search_term
         })
     else:
         # TODO: Add message to alert user his search did not return any results
