@@ -1,4 +1,5 @@
 import re
+import random
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseNotAllowed
 import markdown2
@@ -41,6 +42,11 @@ def delete_entry(request):
         return index(request)
     else:
         return render(request, "encyclopedia/storage_error.html")
+
+
+def random_page(request):
+    entry_title = random.choice(util.list_entries())
+    return display_entry(request, entry_title)
 
 
 def display_entry(request, entry_title):
