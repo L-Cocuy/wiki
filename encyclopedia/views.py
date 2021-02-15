@@ -1,6 +1,6 @@
 import re
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseNotAllowed
 import markdown2
 
 from . import util
@@ -17,6 +17,22 @@ def new_entry(request):
             content = request.POST['markdown_content']
             util.save_entry(entry_title, content)
             return display_entry(request, entry_title)
+
+
+def edit(request):
+    if request.method == 'GET':
+        entry_title = request.GET['entry_title']
+        content = util.get_entry(entry_title)
+        return render(request, "encyclopedia/edit.html", {
+            "entry_title": entry_title,
+            "content": content
+        })
+
+    elif request.method == 'POST':
+        entry_title = request.POST['entry_title']
+        content = request.POST['markdown_content']
+        util.save_entry(entry_title, content)
+        return display_entry(request, entry_title)
 
 
 def display_entry(request, entry_title):

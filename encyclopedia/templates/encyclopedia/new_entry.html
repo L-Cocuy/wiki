@@ -7,8 +7,8 @@ New Entry
 {% block body %}
 <form action={% url 'new_entry' %} method="POST">
   {% csrf_token %}
-  <label for="markdown">New Entry</label><br><br>
-  <input type="text" , name="q" , placeholder="Title"><br>
+  <label for="markdown_content">New Entry</label><br><br>
+  <input type="text" , name="q" , placeholder="Title" required><br>
   <textarea name="markdown_content" id="markdown_content" rows="2">
   </textarea>
   <div>
