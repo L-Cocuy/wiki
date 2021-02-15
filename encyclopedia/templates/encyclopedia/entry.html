@@ -11,4 +11,11 @@
   <input type="submit" value="Edit">
   <input type="hidden" value={{entry_title}} name="entry_title">
 </form>
+<form action={% url 'delete' %} method='GET'>
+  {% csrf_token %}
+  <div>
+    <input type="submit" value="Delete">
+    <input type="hidden" value={{entry_title}} name="entry_title">
+  </div>
+</form>
 {% endblock %}

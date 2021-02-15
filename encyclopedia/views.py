@@ -10,9 +10,9 @@ def new_entry(request):
     if request.method == 'GET':
         return render(request, "encyclopedia/new_entry.html")
     elif request.method == 'POST':
-        entry_title = request.POST['q']
+        entry_title = request.POST['q'].replace(" ", "_")
         if entry_title in util.list_entries():
-            return render(request, "encyclopedia/save_error.html")
+            return render(request, "encyclopedia/storage_error.html")
         else:
             content = request.POST['markdown_content']
             util.save_entry(entry_title, content)
@@ -33,6 +33,14 @@ def edit(request):
         content = request.POST['markdown_content']
         util.save_entry(entry_title, content)
         return display_entry(request, entry_title)
+
+
+def delete_entry(request):
+    entry_title = request.GET['entry_title']
+    if util.delete_entry(entry_title):
+        return index(request)
+    else:
+        return render(request, "encyclopedia/storage_error.html")
 
 
 def display_entry(request, entry_title):
