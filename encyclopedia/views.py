@@ -1,5 +1,6 @@
 import re
 from django.shortcuts import render
+from django.http import HttpResponse
 import markdown2
 
 from . import util
@@ -10,9 +11,12 @@ def new_entry(request):
         return render(request, "encyclopedia/new_entry.html")
     elif request.method == 'POST':
         entry_title = request.POST['q']
-        content = request.POST['markdown_content']
-        util.save_entry(entry_title, content)
-        return display_entry(request, entry_title)
+        if entry_title in util.list_entries():
+            return render(request, "encyclopedia/save_error.html")
+        else:
+            content = request.POST['markdown_content']
+            util.save_entry(entry_title, content)
+            return display_entry(request, entry_title)
 
 
 def display_entry(request, entry_title):
