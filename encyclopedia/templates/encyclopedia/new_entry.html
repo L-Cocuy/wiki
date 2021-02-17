@@ -5,7 +5,7 @@ New Entry
 {% endblock %}
 
 {% block body %}
-<form action={% url 'new_entry' %} method="POST">
+<form action="{% url 'new_entry' %" } method="POST">
   {% csrf_token %}
   <label for="markdown_content">New Entry</label><br><br>
   <input type="text" , name="q" , placeholder="Title" required><br>
