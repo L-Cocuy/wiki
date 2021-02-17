@@ -7,6 +7,34 @@ import markdown2
 from . import util
 
 
+def index(request):
+    return render(request, "encyclopedia/index.html", {
+        "entries": util.list_entries()
+    })
+
+
+def search(request):
+    search_term = request.GET['q']
+    existing_entries = util.list_entries()
+    exact_match = [x for x in existing_entries if x.lower() ==
+                   search_term.lower()]
+    if exact_match:
+        exact_match = exact_match[0]
+    partial_matches = [
+        x for x in existing_entries if search_term.lower() in x.lower()]
+
+    if exact_match:
+        return display_entry(request, exact_match)
+    elif partial_matches:
+        return render(request, "encyclopedia/partial_matches.html", {
+            "partial_matches": partial_matches,
+            "search_term": search_term
+        })
+    else:
+        # TODO: Add message to alert user his search did not return any results
+        return index(request)
+
+
 def display_entry(request, entry_title):
     try:
         entry_title = request.GET['q']
@@ -60,31 +88,3 @@ def delete_entry(request):
 def random_page(request):
     entry_title = random.choice(util.list_entries())
     return display_entry(request, entry_title)
-
-
-def search(request):
-    search_term = request.GET['q']
-    existing_entries = util.list_entries()
-    exact_match = [x for x in existing_entries if x.lower() ==
-                   search_term.lower()]
-    if exact_match:
-        exact_match = exact_match[0]
-    partial_matches = [
-        x for x in existing_entries if search_term.lower() in x.lower()]
-
-    if exact_match:
-        return display_entry(request, exact_match)
-    elif partial_matches:
-        return render(request, "encyclopedia/partial_matches.html", {
-            "partial_matches": partial_matches,
-            "search_term": search_term
-        })
-    else:
-        # TODO: Add message to alert user his search did not return any results
-        return index(request)
-
-
-def index(request):
-    return render(request, "encyclopedia/index.html", {
-        "entries": util.list_entries()
-    })
