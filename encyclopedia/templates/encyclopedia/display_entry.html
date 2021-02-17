@@ -7,12 +7,12 @@
 {% block body %}
 {{entry|safe}}
 <div style="display: flex; flex-direction: row;">
-  <form action="{% url 'edit' %}" method="GET" style="margin: 10px;">
+  <form action={% url 'edit' %} method="GET" style="margin: 10px;">
     {% csrf_token %}
     <input type="submit" value="Edit">
     <input type="hidden" value={{entry_title}} name="entry_title">
   </form>
-  <form action="{% url 'delete' %}" method='GET' style="margin: 10px;">
+  <form action={% url 'delete' %} method='GET' style="margin: 10px;">
     {% csrf_token %}
     <div>
       <input type="submit" value="Delete" onclick="return confirm('Are you sure?')">

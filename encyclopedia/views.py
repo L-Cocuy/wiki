@@ -6,14 +6,23 @@ import markdown2
 
 from . import util
 
-# TODO: Change forms to Django forms
-# TODO: Use server-side validation of data submitted in form
-# TODO: Add quotes around url calls in htmls
+
+def display_entry(request, entry_title):
+    try:
+        entry_title = request.GET['q']
+    except:
+        entry_title = entry_title
+    entry_md = util.get_entry(entry_title)
+    entry_html = markdown2.markdown(entry_md)
+    return render(request, "encyclopedia/display_entry.html", {
+        "entry_title": entry_title,
+        "entry": entry_html})
 
 
 def new_entry(request):
     if request.method == 'GET':
         return render(request, "encyclopedia/new_entry.html")
+
     elif request.method == 'POST':
         entry_title = request.POST['q'].replace(" ", "_")
         if entry_title in util.list_entries():
@@ -51,18 +60,6 @@ def delete_entry(request):
 def random_page(request):
     entry_title = random.choice(util.list_entries())
     return display_entry(request, entry_title)
-
-
-def display_entry(request, entry_title):
-    try:
-        entry_title = request.GET['q']
-    except:
-        entry_title = entry_title
-    entry_md = util.get_entry(entry_title)
-    entry_html = markdown2.markdown(entry_md)
-    return render(request, "encyclopedia/entry.html", {
-        "entry_title": entry_title,
-        "entry": entry_html})
 
 
 def search(request):
