@@ -6,6 +6,10 @@ import markdown2
 
 from . import util
 
+# TODO: Change forms to Django forms
+# TODO: Use server-side validation of data submitted in form
+# TODO: Add quotes around url calls in htmls
+
 
 def new_entry(request):
     if request.method == 'GET':
