@@ -6,16 +6,18 @@
 
 {% block body %}
 {{entry|safe}}
-<form action={% url 'edit' %} method="GET">
-  {% csrf_token %}
-  <input type="submit" value="Edit">
-  <input type="hidden" value={{entry_title}} name="entry_title">
-</form>
-<form action={% url 'delete' %} method='GET'>
-  {% csrf_token %}
-  <div>
-    <input type="submit" value="Delete">
+<div style="display: flex; flex-direction: row;">
+  <form action={% url 'edit' %} method="GET" style="margin: 10px;">
+    {% csrf_token %}
+    <input type="submit" value="Edit">
     <input type="hidden" value={{entry_title}} name="entry_title">
-  </div>
-</form>
+  </form>
+  <form action={% url 'delete' %} method='GET' style="margin: 10px;">
+    {% csrf_token %}
+    <div>
+      <input type="submit" value="Delete">
+      <input type="hidden" value={{entry_title}} name="entry_title">
+    </div>
+  </form>
+</div>
 {% endblock %}
