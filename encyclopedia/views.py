@@ -1,11 +1,15 @@
 import re
 import random
+from django.forms import widgets
+from django.forms.fields import CharField
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseNotAllowed
 from django import forms
 import markdown2
 
 from . import util
+
+# comment= forms.CharField(widget=forms.Textarea(attrs={"rows":5, "cols":20})
 
 
 def index(request):
