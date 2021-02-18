@@ -9,8 +9,6 @@ import markdown2
 
 from . import util
 
-# comment= forms.CharField(widget=forms.Textarea(attrs={"rows":5, "cols":20})
-
 
 def index(request):
     return render(request, "encyclopedia/index.html", {
