@@ -20,7 +20,7 @@ class Markdown():
                 self.html_list[i] = f'<h{h_level}>' + \
                     re.sub(pattern, '', line) + f'</h{h_level}>'
 
-    def process_lists(self):
+    def process_unordered_lists(self):
         pattern = re.compile('^-\s')
 
         for i, line in enumerate(self.markdown_list):
