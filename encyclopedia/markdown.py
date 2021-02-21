@@ -33,6 +33,7 @@ class Markdown():
         self.process_headers()
         self.process_bold()
         self.process_links()
+        self.process_paragraphs()
 
     def process_headers(self):
         pattern = re.compile('^(#+)\s')
@@ -87,9 +88,26 @@ class Markdown():
                     self.html_list[i] = re.sub(re.escape(
                         f"[{match[0]}]({match[1]})"), f"<a href='{match[1]}'>{match[0]}</a>", self.html_list[i])
 
+    def process_paragraphs(self):
+        for i, line in enumerate(self.html_list):
+            if line:
+                if line[0] == "<":
+                    continue
+                elif (i > 0) and (self.html_list[i-1][0:3] == "<p>"):
+                    if i == len(self.html_list)-1:
+                        self.html_list[i] = self.html_list[i] + "</p>"
+                    elif (not self.html_list[i+1]) or (self.html_list[i+1][0] == "<"):
+                        self.html_list[i] = self.html_list[i] + "</p>"
+                    else:
+                        continue
+                else:
+                    self.html_list[i] = "<p>" + self.html_list[i]
+                if (not self.html_list[i+1]) or (self.html_list[i+1][0] == "<"):
+                    self.html_list[i] = self.html_list[i] + "</p>"
+
 
 converter = Markdown(
-    '# This is a [link](www.googe.com) and a [second link](www.yahoo.com)\r\n\r\n## This is a **third** line\r\n- lineitem - **hyphen** - **in** \r\n- lineitem2\r\n1. oli1\r\n2. oli2')
+    '# This is a [link](www.googe.com) and a [second link](www.yahoo.com)\r\n\r\n## This is a **third** line\r\nRandom line\r\nMore lines\r\n\r\nSecond paragraph\r\n\r\n- lineitem - **hyphen** - **in** \r\n- lineitem2\r\n1. oli1\r\n2. oli2')
 print(converter.markdown_list)
 converter.markdown()
 print(converter.html_list)
