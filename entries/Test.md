@@ -9,8 +9,11 @@ This is regular text
 - second item of unordered list
 
 ## Smaller header
-1.   First item in ordered list
-2. Second item in ordered list
+2. First item in ordered list
+3. Second item in ordered list
+1. Last item in ordered list with unordered numbers
+  
+  
   
   
   
