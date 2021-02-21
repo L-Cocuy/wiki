@@ -31,6 +31,7 @@ class Markdown():
             self.process_lists(list_pattern)
 
         self.process_headers()
+        self.process_bold()
 
     def process_headers(self):
         pattern = re.compile('^(#+)\s')
@@ -61,9 +62,21 @@ class Markdown():
                     self.html_list[i] = self.html_list[i] + \
                         patterns["list_close"]
 
+    def process_bold(self):
+        regex_pattern = r"\*{2}(.*?)\*{2}"
+        for i, line in enumerate(self.markdown_list):
+            if not line:
+                continue
+
+            matches = re.findall(regex_pattern, line)
+            if matches:
+                for match in matches:
+                    self.html_list[i] = re.sub(re.escape(f"**{match}**"),
+                                               f"<strong>{match}</strong>", self.html_list[i])
+
 
 converter = Markdown(
-    '# This is a test\r\n\r\n## This is a third line\r\n- lineitem - hyphen - in \r\n- lineitem2\r\n1. oli1\r\n2. oli2')
+    '# This is a test\r\n\r\n## This is a **third** line\r\n- lineitem - **hyphen** - **in** \r\n- lineitem2\r\n1. oli1\r\n2. oli2')
 print(converter.markdown_list)
 converter.markdown()
 print(converter.html_list)
