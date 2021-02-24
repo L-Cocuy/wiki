@@ -1,20 +1,28 @@
 from copy import deepcopy
 import re
 
-# TODO: Add docstrings and type hinting to this module
-
 
 class Markdown():
+    """Class that receives a string written in Markup and converts it to HTML
+    Includes headers (h1 to h6), lists denoted by -, + or *, bold denoted by 
+    **bold**, links denoted by [link](www.link.com), and paragraphs
+    """
 
     def __init__(self, content):
         self.markdown_list = content.split('\r\n')
         self.html_list = deepcopy(self.markdown_list)
 
-    def markdown(self):
+    def markdown(self) -> str:
+        """Function that handles the conversion to HTML
+
+        Returns:
+            str: Correctly formate HTML string
+        """
+
         list_patterns = [
             {
                 "type": "unordered list",
-                "regex": "^-\s",
+                "regex": "^[-+*]\s",
                 "lineitem_open": "<li>",
                 "lineitem_close": "</li>",
                 "list_open": "<ul>",
@@ -92,22 +100,30 @@ class Markdown():
                         f"[{match[0]}]({match[1]})"), f"<a href='{match[1]}'>{match[0]}</a>", self.html_list[i])
 
     def process_paragraphs(self):
-        # TODO: Organize this mess
+        # Iterate and give a <p> tag to all with no starting tag
+        # except if previous has a <p> tag or if previous has no tag
+        # Iterate and add </p> tag if no closing tag when next has a tag,
+        # is empty, or is last
+
         for i, line in enumerate(self.html_list):
-            if line:
-                if line[0] == "<":
+            if line:  # do nothing if line is empty
+                if line[0] == "<":  # continue if line already has a tag
                     continue
-                elif (i > 0) and (self.html_list[i-1][0:3] == "<p>"):
-                    if i == len(self.html_list)-1:
-                        self.html_list[i] = self.html_list[i] + "</p>"
-                    elif (not self.html_list[i+1]) or (self.html_list[i+1][0] == "<"):
-                        self.html_list[i] = self.html_list[i] + "</p>"
-                    else:
-                        continue
-                else:
+                elif i == 0:  # if first line
                     self.html_list[i] = "<p>" + self.html_list[i]
-                if i == len(self.html_list)-1:
-                    self.html_list[i] = self.html_list[i] + "</p>"
+                elif not self.html_list[i-1]:  # ir previous line is empty
+                    self.html_list[i] = "<p>" + self.html_list[i]
+                elif (self.html_list[i-1][0:3] == "<p>") or (self.html_list[i-1][0] != "<"):
+                    continue  # if previous already has a <p> tag or no tag at all
+
+        for i, line in enumerate(self.html_list):
+            if line:  # do nothing if line is empty
+                if line[-1] == ">":  # continue if line already has a closing tag
                     continue
-                elif (not self.html_list[i+1]) or (self.html_list[i+1][0] == "<"):
+                elif i == len(self.html_list)-1:  # if last line
+                    self.html_list[i] = self.html_list[i] + "</p>"
+                elif not self.html_list[i+1]:  # if next line is empty
+                    self.html_list[i] = self.html_list[i] + "</p>"
+                # if next line already has a tag
+                elif self.html_list[i+1][0] == "<":
                     self.html_list[i] = self.html_list[i] + "</p>"
