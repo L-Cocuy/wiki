@@ -1,5 +1,6 @@
 from copy import deepcopy
 import re
+from typing import List
 
 
 class Markdown():
@@ -58,7 +59,7 @@ class Markdown():
                 self.html_list[i] = f'<h{h_level}>' + \
                     re.sub(pattern, '', line) + f'</h{h_level}>'
 
-    def process_lists(self, patterns):
+    def process_lists(self, patterns: List[dict]):
         # TODO: Add other * and + as list indicators as well
         for i, line in enumerate(self.markdown_list):
             if not line:
