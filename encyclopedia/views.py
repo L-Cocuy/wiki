@@ -17,6 +17,7 @@ def display_entry(request, entry_title):
     except:
         entry_title = entry_title
     entry_md = util.get_entry(entry_title)
+
     if not entry_md:
         return render(request, "encyclopedia/not_available.html")
     else:
