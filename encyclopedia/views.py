@@ -17,11 +17,14 @@ def display_entry(request, entry_title):
     except:
         entry_title = entry_title
     entry_md = util.get_entry(entry_title)
-    converter = markdown.Markdown(entry_md)
-    entry_html = converter.markdown()
-    return render(request, "encyclopedia/display_entry.html", {
-        "entry_title": entry_title,
-        "entry": entry_html})
+    if not entry_md:
+        return render(request, "encyclopedia/not_available.html")
+    else:
+        converter = markdown.Markdown(entry_md)
+        entry_html = converter.markdown()
+        return render(request, "encyclopedia/display_entry.html", {
+            "entry_title": entry_title,
+            "entry": entry_html})
 
 
 def search(request):
